@@ -38,6 +38,8 @@ type PricingPlan = {
   bestFor: string;
   features: string[];
   priceMur: number;
+  priceUsd?: number; // fixed USD price; if absent, live conversion is used
+  note?: string;
 };
 
 type Faq = {
@@ -347,11 +349,11 @@ const projectsByLocale: Record<Locale, Project[]> = {
       summary:
         "A curated vinyl record storefront with genre browsing, real album data, and a timeless brand aesthetic.",
       challenge:
-        "Build a live e-commerce experience for a record store complete with a real music catalog — without manually entering every product.",
+        "Build a live e-commerce experience for a record store complete with a real music catalog, without manually entering every product.",
       solution:
-        "Wrote Python scrapers and hit music APIs to pull album data, piped it through XML/XSLT for structure, and wrapped it in a clean responsive frontend. Design-wise, everything was built to feel like flipping through crates — warm, tactile, unhurried.",
+        "Wrote Python scrapers and hit music APIs to pull album data, piped it through XML/XSLT for structure, and wrapped it in a clean responsive frontend. Design-wise, everything was built to feel like flipping through crates: warm, tactile, unhurried.",
       result:
-        "A live deployed storefront that merges data engineering with front-end craft. Proof that backend pipelines and good design aren't mutually exclusive.",
+        "A live deployed storefront that merges data engineering with front-end craft. Proof that backend pipelines and good design are not mutually exclusive.",
       stack: ["HTML", "CSS", "JavaScript", "Python", "XML / XSLT", "Vercel"],
       accent: "from-[#4c1d95] to-[#6d28d9]",
       url: "https://recordstore-nine.vercel.app",
@@ -361,11 +363,11 @@ const projectsByLocale: Record<Locale, Project[]> = {
       title: "Cafe 555",
       industry: "Food & Beverage",
       summary:
-        "A clean, fast web presence for a modern cafe — built to feel as good as the coffee tastes.",
+        "A clean, fast web presence for a modern cafe, built to feel as good as the coffee tastes.",
       challenge:
-        "The cafe needed somewhere to send customers online that wasn't just an Instagram page — somewhere with actual information, personality, and a reason to visit.",
+        "The cafe needed somewhere to send customers online that was not just an Instagram page. Somewhere with actual information, personality, and a reason to visit.",
       solution:
-        "Kept it lean and deliberate: fast load, clear layout, strong visual identity. No clutter, no bloat — just the essentials presented well.",
+        "Kept it lean and deliberate: fast load, clear layout, strong visual identity. No clutter, no bloat. Just the essentials, presented well.",
       result:
         "A live site that gives the cafe a professional presence without getting in its own way.",
       stack: ["Next.js", "Tailwind CSS", "Vercel"],
@@ -383,7 +385,7 @@ const projectsByLocale: Record<Locale, Project[]> = {
       challenge:
         "Creer une boutique en ligne pour un disquaire avec un vrai catalogue musical, sans saisie manuelle de chaque produit.",
       solution:
-        "Scripts Python + APIs musicales pour extraire les donnees albums, structures via XML/XSLT, et habilles d'un frontend responsive soigne. Le design evoque le plaisir de fouiller dans les bacs.",
+        "Scripts Python + APIs musicales pour extraire les donnees albums, structures via XML/XSLT, et habilles d'un frontend responsive soigne. Le design evoque le plaisir de fouiller dans les bacs: warm, tactile, sans hâte.",
       result:
         "Une boutique en ligne deployee qui marie ingenierie de donnees et design front-end de qualite.",
       stack: ["HTML", "CSS", "JavaScript", "Python", "XML / XSLT", "Vercel"],
@@ -395,9 +397,9 @@ const projectsByLocale: Record<Locale, Project[]> = {
       title: "Cafe 555",
       industry: "Restauration",
       summary:
-        "Une presence web epuree et rapide pour un cafe moderne — aussi agreable que son café.",
+        "Une presence web epuree et rapide pour un cafe moderne, aussi agreable que son cafe.",
       challenge:
-        "Le cafe avait besoin d'autre chose qu'une page Instagram — un endroit avec des vraies infos, de la personnalite, et une raison de venir.",
+        "Le cafe avait besoin d'autre chose qu'une page Instagram. Un endroit avec des vraies infos, de la personnalite, et une raison de venir.",
       solution:
         "Approche minimaliste et deliberee: chargement rapide, mise en page claire, identite visuelle forte. Rien de superflu.",
       result:
@@ -412,11 +414,12 @@ const projectsByLocale: Record<Locale, Project[]> = {
 const pricingByLocale: Record<Locale, PricingPlan[]> = {
   en: [
     {
-      name: "Starter",
-      bestFor: "New businesses",
-      priceMur: 5000,
+      name: "Basic",
+      bestFor: "Solo ventures & landing pages",
+      priceMur: 7000,
+      priceUsd: 150,
       features: [
-        "Up to 5 pages",
+        "Up to 3 pages",
         "Professional design",
         "Mobile optimization",
         "Contact form setup",
@@ -424,9 +427,23 @@ const pricingByLocale: Record<Locale, PricingPlan[]> = {
       ],
     },
     {
+      name: "Starter",
+      bestFor: "New businesses",
+      priceMur: 16000,
+      priceUsd: 350,
+      features: [
+        "Up to 5 pages",
+        "Custom visual direction",
+        "Mobile-first layout",
+        "Contact + WhatsApp integration",
+        "SEO-ready structure",
+      ],
+    },
+    {
       name: "Business",
       bestFor: "Growing companies",
-      priceMur: 15000,
+      priceMur: 28000,
+      priceUsd: 600,
       features: [
         "Up to 10 pages",
         "Custom visual direction",
@@ -438,7 +455,8 @@ const pricingByLocale: Record<Locale, PricingPlan[]> = {
     {
       name: "Ecommerce",
       bestFor: "Online selling",
-      priceMur: 25000,
+      priceMur: 30000,
+      note: "Very basic starting price. A full-featured store will be quoted individually.",
       features: [
         "Storefront and products",
         "Cart and checkout",
@@ -450,11 +468,12 @@ const pricingByLocale: Record<Locale, PricingPlan[]> = {
   ],
   fr: [
     {
-      name: "Starter",
-      bestFor: "Nouvelles entreprises",
-      priceMur: 5000,
+      name: "Basic",
+      bestFor: "Projets solo et landing pages",
+      priceMur: 7000,
+      priceUsd: 150,
       features: [
-        "Jusqu'a 5 pages",
+        "Jusqu'a 3 pages",
         "Design professionnel",
         "Optimisation mobile",
         "Formulaire de contact",
@@ -462,9 +481,23 @@ const pricingByLocale: Record<Locale, PricingPlan[]> = {
       ],
     },
     {
+      name: "Starter",
+      bestFor: "Nouvelles entreprises",
+      priceMur: 16000,
+      priceUsd: 350,
+      features: [
+        "Jusqu'a 5 pages",
+        "Direction visuelle sur mesure",
+        "Layout mobile-first",
+        "Contact + integration WhatsApp",
+        "Structure SEO optimisee",
+      ],
+    },
+    {
       name: "Business",
       bestFor: "Entreprises en croissance",
-      priceMur: 15000,
+      priceMur: 28000,
+      priceUsd: 600,
       features: [
         "Jusqu'a 10 pages",
         "Direction visuelle sur mesure",
@@ -476,7 +509,8 @@ const pricingByLocale: Record<Locale, PricingPlan[]> = {
     {
       name: "Ecommerce",
       bestFor: "Vente en ligne",
-      priceMur: 25000,
+      priceMur: 30000,
+      note: "Prix de depart tres basique. Une boutique complete sera devisee individuellement.",
       features: [
         "Boutique et fiches produits",
         "Panier et paiement",
@@ -498,7 +532,7 @@ const faqsByLocale: Record<Locale, Faq[]> = {
     {
       question: "Do you work with clients outside your country?",
       answer:
-        "Absolutely. Geography is not a barrier — we work with clients remotely from anywhere in the world. All it takes is a clear brief and good communication.",
+        "Absolutely. Geography is not a barrier. We work with clients remotely from anywhere in the world. All it takes is a clear brief and good communication.",
     },
     {
       question: "Can you redesign my existing website?",
@@ -520,7 +554,7 @@ const faqsByLocale: Record<Locale, Faq[]> = {
     {
       question: "Travaillez-vous avec des clients a l'etranger?",
       answer:
-        "Absolument. La geographie n'est pas un obstacle — nous travaillons a distance avec des clients partout dans le monde. Il suffit d'un brief clair et d'une bonne communication.",
+        "Absolument. La geographie n'est pas un obstacle. Nous travaillons a distance avec des clients partout dans le monde. Il suffit d'un brief clair et d'une bonne communication.",
     },
     {
       question: "Pouvez-vous refaire mon site existant?",
@@ -540,7 +574,7 @@ const processStepsByLocale: Record<Locale, ProcessStep[]> = {
     {
       title: "Discovery",
       description:
-        "We ask the right questions — about your offer, your audience, and what success actually looks like for you — before touching a single design element.",
+        "We ask the right questions about your offer, your audience, and what success actually looks like for you, before touching a single design element.",
     },
     {
       title: "Design",
@@ -550,19 +584,19 @@ const processStepsByLocale: Record<Locale, ProcessStep[]> = {
     {
       title: "Build",
       description:
-        "Clean code, fast load times, mobile-first. Every section is built with purpose — not just to look good, but to move people toward action.",
+        "Clean code, fast load times, mobile-first. Every section is built with purpose: not just to look good, but to move people toward action.",
     },
     {
       title: "Launch",
       description:
-        "QA, final checks, go live. And we don't disappear after launch — we're around for the first growth cycle.",
+        "QA, final checks, go live. And we do not disappear after launch. We are around for the first growth cycle.",
     },
   ],
   fr: [
     {
       title: "Decouverte",
       description:
-        "Nous posons les bonnes questions — sur votre offre, votre audience et ce que le succes signifie vraiment pour vous — avant toute decision de design.",
+        "Nous posons les bonnes questions sur votre offre, votre audience et ce que le succes signifie vraiment pour vous, avant toute decision de design.",
     },
     {
       title: "Design",
@@ -572,12 +606,12 @@ const processStepsByLocale: Record<Locale, ProcessStep[]> = {
     {
       title: "Developpement",
       description:
-        "Code propre, chargement rapide, mobile-first. Chaque section est construite avec intention — pas juste pour etre jolie, mais pour pousser a l'action.",
+        "Code propre, chargement rapide, mobile-first. Chaque section est construite avec intention: pas juste pour etre jolie, mais pour pousser a l'action.",
     },
     {
       title: "Lancement",
       description:
-        "QA, verifications finales, mise en ligne. Et nous ne disparaissons pas apres le lancement — nous sommes la pour le premier cycle de croissance.",
+        "QA, verifications finales, mise en ligne. Et nous ne disparaissons pas apres le lancement. Nous sommes la pour le premier cycle de croissance.",
     },
   ],
 };
@@ -679,7 +713,7 @@ const servicesPageTextByLocale: Record<Locale, ServicesPageText> = {
     label: "Services",
     title: "Website services designed for real growth.",
     subtitle:
-      "From startups to established brands — flexible website solutions for businesses that want a stronger online presence, wherever they are.",
+      "From startups to established brands, flexible website solutions for businesses that want a stronger online presence, wherever they are.",
     processTitle: "Our working process",
     ctaTitle: "Not sure which service fits you?",
     ctaText: "Share your goals and we will recommend the right approach.",
@@ -703,7 +737,7 @@ const pricingPageTextByLocale: Record<Locale, PricingPageText> = {
   en: {
     label: "Pricing",
     title: "Website packages built for different business stages.",
-    subtitle: "Starting prices below. Every project is scoped individually — get in touch and we'll figure out the right fit.",
+    subtitle: "Starting prices below. Every project is scoped individually. Get in touch and we'll figure out the right fit.",
     popularBadge: "Most Popular",
     bestForLabel: "Best for",
     fromLabel: "from",
@@ -715,7 +749,7 @@ const pricingPageTextByLocale: Record<Locale, PricingPageText> = {
   fr: {
     label: "Tarifs",
     title: "Des packs web adaptes a chaque etape de votre business.",
-    subtitle: "Prix de depart ci-dessous. Chaque projet est evalue individuellement — contactez-nous pour trouver la bonne formule.",
+    subtitle: "Prix de depart ci-dessous. Chaque projet est evalue individuellement. Contactez-nous pour trouver la bonne formule.",
     popularBadge: "Le plus choisi",
     bestForLabel: "Ideal pour",
     fromLabel: "a partir de",
@@ -731,10 +765,10 @@ const aboutPageTextByLocale: Record<Locale, AboutPageText> = {
     label: "About",
     title: "We build websites that help businesses stand out.",
     intro:
-      "HoneyGrid is run by Kshitij — a full-stack developer and designer who got tired of seeing businesses settle for generic, slow, forgettable websites. The mission is straightforward: build things that actually work, look the part, and give clients something to be proud of.",
+      "HoneyGrid is run by Kshitij, a full-stack developer and designer who got tired of seeing businesses settle for generic, slow, forgettable websites. The mission is straightforward: build things that actually work, look the part, and give clients something to be proud of.",
     approachTitle: "Our approach",
     approachP1:
-      "Clean design. Practical messaging. Fast execution. The result is a website that makes your business easier to trust and easier to contact — whether a visitor is on the other side of the street or the other side of the world.",
+      "Clean design. Practical messaging. Fast execution. The result is a website that makes your business easier to trust and easier to contact, whether a visitor is on the other side of the street or the other side of the world.",
     approachP2:
       "We skip the generic templates. Every project gets a custom structure and a visual personality built around your industry, your audience, and what you're actually trying to achieve.",
     valuesTitle: "What we value",
@@ -753,10 +787,10 @@ const aboutPageTextByLocale: Record<Locale, AboutPageText> = {
     title:
       "Nous creons des sites qui aident les entreprises a se demarquer.",
     intro:
-      "HoneyGrid est dirige par Kshitij — un developpeur et designer full-stack qui en avait assez de voir des entreprises se contenter de sites generiques, lents et oubliables. La mission est simple: construire des choses qui fonctionnent vraiment, qui ont de la gueule, et dont les clients sont fiers.",
+      "HoneyGrid est dirige par Kshitij, un developpeur et designer full-stack qui en avait assez de voir des entreprises se contenter de sites generiques, lents et oubliables. La mission est simple: construire des choses qui fonctionnent vraiment, qui ont de la gueule, et dont les clients sont fiers.",
     approachTitle: "Notre approche",
     approachP1:
-      "Design propre. Message clair. Execution rapide. Le resultat: un site qui inspire confiance et genere plus de prises de contact — que le visiteur soit a deux rues ou a l'autre bout du monde.",
+      "Design propre. Message clair. Execution rapide. Le resultat: un site qui inspire confiance et genere plus de prises de contact, que le visiteur soit a deux rues ou a l'autre bout du monde.",
     approachP2:
       "Pas de templates generiques. Chaque projet recoit une structure et une identite visuelle sur mesure, pensees pour votre secteur, votre audience et vos vrais objectifs.",
     valuesTitle: "Nos valeurs",
@@ -805,7 +839,7 @@ const portfolioPageTextByLocale: Record<Locale, PortfolioPageText> = {
     label: "Portfolio",
     title: "Projects we've shipped.",
     subtitle:
-      "A mix of client work and personal builds — each one approached with the same attention to structure, speed, and craft.",
+      "A mix of client work and personal builds, each one approached with the same attention to structure, speed, and craft.",
     industryLabel: "Industry",
     caseStudyCta: "View case study",
   },
@@ -813,7 +847,7 @@ const portfolioPageTextByLocale: Record<Locale, PortfolioPageText> = {
     label: "Portfolio",
     title: "Projets que nous avons livres.",
     subtitle:
-      "Un mix de projets clients et de realisations personnelles — chacun aborde avec la meme rigueur de structure, de vitesse et de soin.",
+      "Un mix de projets clients et de realisations personnelles, chacun aborde avec la meme rigueur de structure, de vitesse et de soin.",
     industryLabel: "Secteur",
     caseStudyCta: "Voir l'etude de cas",
   },
@@ -821,23 +855,23 @@ const portfolioPageTextByLocale: Record<Locale, PortfolioPageText> = {
 
 const casePageTextByLocale: Record<Locale, CasePageText> = {
   en: {
-    projectSuffix: "— Case Study",
+    projectSuffix: "/ Case Study",
     challengeTitle: "The challenge",
     solutionTitle: "Our solution",
     outcomeTitle: "Outcome",
     stackTitle: "Project stack",
     cta: "Build Something Similar",
-    liveCta: "View Live Project →",
+    liveCta: "View Live Project",
     notFoundTitle: "Case Study Not Found",
   },
   fr: {
-    projectSuffix: "— Etude de cas",
+    projectSuffix: "/ Etude de cas",
     challengeTitle: "Le challenge",
     solutionTitle: "Notre solution",
     outcomeTitle: "Resultat",
     stackTitle: "Technologies utilisees",
     cta: "Construire quelque chose de similaire",
-    liveCta: "Voir le projet en ligne →",
+    liveCta: "Voir le projet en ligne",
     notFoundTitle: "Etude de cas introuvable",
   },
 };
@@ -954,13 +988,13 @@ const contactFormTextByLocale: Record<Locale, ContactFormText> = {
 
 const seoTextByLocale: Record<Locale, SeoText> = {
   en: {
-    rootTitle: "HoneyGrid — Web Design Studio",
+    rootTitle: "HoneyGrid Web Design Studio",
     rootDescription:
       "Custom websites built for businesses that want real results. Fast, mobile-friendly, SEO-ready, and designed to convert.",
     twitterDescription:
       "Need a modern, high-performing website? Get a free quote within 24 hours.",
     siteTitleTemplate: "%s | HoneyGrid",
-    homeTitle: "HoneyGrid — Professional Web Design Studio",
+    homeTitle: "HoneyGrid Professional Web Design Studio",
     homeDescription:
       "Custom websites for ambitious businesses. Fast, mobile-friendly, SEO-ready, and built to convert visitors into leads.",
     servicesTitle: "Website Services",
@@ -971,13 +1005,13 @@ const seoTextByLocale: Record<Locale, SeoText> = {
       "Flexible website packages for startups, growing businesses, and ecommerce brands. Every project is quoted individually.",
     aboutTitle: "About HoneyGrid",
     aboutDescription:
-      "HoneyGrid is a web design studio run by Kshitij — building fast, professional websites for businesses around the world.",
+      "HoneyGrid is a web design studio run by Kshitij, building fast, professional websites for businesses around the world.",
     contactTitle: "Get a Website Quote",
     contactDescription:
       "Tell us about your project and receive a free website quote within 24 hours.",
     portfolioTitle: "Portfolio",
     portfolioDescription:
-      "A collection of web projects — from client sites to personal builds — each one built with purpose and craft.",
+      "A collection of web projects: from client sites to personal builds, each one built with purpose and craft.",
     thankYouTitle: "Thank You",
     thankYouDescription: "Your request has been received.",
     privacyTitle: "Privacy Policy",
@@ -986,13 +1020,13 @@ const seoTextByLocale: Record<Locale, SeoText> = {
     termsDescription: "Terms of service for HoneyGrid website projects.",
   },
   fr: {
-    rootTitle: "HoneyGrid — Studio Web",
+    rootTitle: "HoneyGrid Studio Web",
     rootDescription:
       "Sites web sur mesure pour les entreprises qui veulent de vrais resultats. Rapides, responsives et optimises pour convertir.",
     twitterDescription:
       "Besoin d'un site moderne et performant? Recevez un devis gratuit en 24 heures.",
     siteTitleTemplate: "%s | HoneyGrid",
-    homeTitle: "HoneyGrid — Studio de Design Web Professionnel",
+    homeTitle: "HoneyGrid Studio de Design Web Professionnel",
     homeDescription:
       "Sites web sur mesure pour les entreprises ambitieuses, rapides et concus pour la conversion.",
     servicesTitle: "Services Web",
@@ -1003,13 +1037,13 @@ const seoTextByLocale: Record<Locale, SeoText> = {
       "Des packs web flexibles pour startups, PME et marques ecommerce. Chaque projet est devisé individuellement.",
     aboutTitle: "A propos de HoneyGrid",
     aboutDescription:
-      "HoneyGrid est un studio web dirige par Kshitij — construisant des sites rapides et professionnels pour des entreprises partout dans le monde.",
+      "HoneyGrid est un studio web dirige par Kshitij, construisant des sites rapides et professionnels pour des entreprises partout dans le monde.",
     contactTitle: "Obtenir un devis web",
     contactDescription:
       "Parlez-nous de votre projet et recevez un devis gratuit sous 24 heures.",
     portfolioTitle: "Portfolio",
     portfolioDescription:
-      "Une selection de projets web — de sites clients a des realisations personnelles — chacun construit avec intention et soin.",
+      "Une selection de projets web: de sites clients a des realisations personnelles, chacun construit avec intention et soin.",
     thankYouTitle: "Merci",
     thankYouDescription: "Votre demande a bien ete recue.",
     privacyTitle: "Politique de confidentialite",

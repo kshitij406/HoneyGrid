@@ -9,7 +9,9 @@ type Plan = {
   name: string;
   bestFor: string;
   priceMur: number;
+  priceUsd?: number;
   features: string[];
+  note?: string;
 };
 
 type Props = {
@@ -34,16 +36,22 @@ function formatUsd(amount: number) {
   return `$${Math.ceil(amount).toLocaleString("en-US")}`;
 }
 
+// "Most Popular" is the Business plan (index 2 with 4 tiers)
+const POPULAR_INDEX = 2;
+
 export function PricingCards({ plans, text, locale }: Props) {
   const [currency, setCurrency] = useState<Currency>("MUR");
   const [usdPerMur, setUsdPerMur] = useState<number | null>(null);
   const [rateError, setRateError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  // Only need live rate for plans without a fixed priceUsd
+  const needsLiveRate = plans.some((p) => !p.priceUsd);
+
   function handleCurrencySwitch(next: Currency) {
     if (next === currency) return;
 
-    if (next === "USD" && usdPerMur === null && !rateError) {
+    if (next === "USD" && needsLiveRate && usdPerMur === null && !rateError) {
       startTransition(async () => {
         try {
           const res = await fetch("/api/exchange-rate");
@@ -62,19 +70,22 @@ export function PricingCards({ plans, text, locale }: Props) {
     }
   }
 
-  function displayPrice(priceMur: number) {
-    if (currency === "USD") {
-      if (isPending) return "…";
-      if (rateError || usdPerMur === null) return "—";
-      return formatUsd(priceMur * usdPerMur);
-    }
-    return formatMur(priceMur);
+  function displayPrice(plan: Plan): string {
+    if (currency === "MUR") return formatMur(plan.priceMur);
+
+    // Fixed USD price takes priority
+    if (plan.priceUsd !== undefined) return formatUsd(plan.priceUsd);
+
+    // Live-converted USD (for plans without a fixed rate, e.g. ecommerce)
+    if (isPending) return "…";
+    if (rateError || usdPerMur === null) return "N/A";
+    return formatUsd(plan.priceMur * usdPerMur);
   }
 
   return (
     <div>
       {/* Currency toggle */}
-      <div className="mb-6 flex items-center gap-3">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
         <span className="text-sm font-medium text-[var(--muted)]">Show prices in:</span>
         <div className="inline-flex rounded-full border border-[var(--line)] bg-white p-0.5 text-sm font-semibold">
           {(["MUR", "USD"] as Currency[]).map((c) => (
@@ -91,63 +102,73 @@ export function PricingCards({ plans, text, locale }: Props) {
             </button>
           ))}
         </div>
-        {currency === "USD" && !isPending && !rateError && usdPerMur && (
+        {currency === "USD" && !isPending && (
           <span className="text-xs text-[var(--muted)]">
-            live rate · rounded up
+            {needsLiveRate
+              ? "fixed rates · ecommerce uses live conversion"
+              : "fixed rates"}
           </span>
         )}
         {isPending && (
           <span className="text-xs text-[var(--muted)]">fetching rate…</span>
         )}
-        {rateError && (
-          <span className="text-xs text-red-500">rate unavailable</span>
+        {rateError && currency === "USD" && (
+          <span className="text-xs text-red-500">live rate unavailable</span>
         )}
       </div>
 
-      {/* Pricing cards */}
-      <div className="grid gap-5 lg:grid-cols-3">
-        {plans.map((plan, index) => (
-          <article
-            key={plan.name}
-            className={`section-shell hover-lift reveal-on-scroll p-7 ${
-              index === 1 ? "relative border-2 border-[var(--primary)]" : ""
-            }`}
-          >
-            {index === 1 && (
-              <span className="honey-pill absolute -top-3 right-5 rounded-full px-3 py-1 text-xs font-semibold">
-                {text.popularBadge}
-              </span>
-            )}
-            <p className="text-sm font-semibold text-[var(--primary)]">{plan.name}</p>
-            <p className="mt-1 text-xs text-[var(--muted)]">
-              {text.bestForLabel}: {plan.bestFor}
-            </p>
-            <p className="mt-4 text-3xl font-bold text-[var(--foreground)]">
-              {displayPrice(plan.priceMur)}
-              <span className="text-[var(--primary)]">*</span>
-            </p>
-            <p className="text-xs text-[var(--muted)]">{text.fromLabel}</p>
-            <ul className="mt-5 space-y-2 text-sm text-[var(--foreground)]">
-              {plan.features.map((feature) => (
-                <li
-                  key={feature}
-                  className="rounded-lg border border-[var(--line)] bg-white px-3 py-2"
-                >
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={withLocale("/contact", locale)}
-              className="mt-6 inline-block rounded-full bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-strong)]"
+      {/* Pricing cards — 4 columns on xl */}
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {plans.map((plan, index) => {
+          const isPopular = index === POPULAR_INDEX;
+          return (
+            <article
+              key={plan.name}
+              className={`section-shell hover-lift reveal-on-scroll p-6 ${
+                isPopular ? "relative border-2 border-[var(--primary)]" : ""
+              }`}
             >
-              {text.customButton}
-            </Link>
-          </article>
-        ))}
+              {isPopular && (
+                <span className="honey-pill absolute -top-3 right-4 rounded-full px-3 py-1 text-xs font-semibold">
+                  {text.popularBadge}
+                </span>
+              )}
+              <p className="text-sm font-semibold text-[var(--primary)]">{plan.name}</p>
+              <p className="mt-0.5 text-xs text-[var(--muted)]">
+                {text.bestForLabel}: {plan.bestFor}
+              </p>
+              <p className="mt-4 text-2xl font-bold text-[var(--foreground)]">
+                {displayPrice(plan)}
+                <span className="text-[var(--primary)]">*</span>
+              </p>
+              <p className="text-xs text-[var(--muted)]">{text.fromLabel}</p>
+              {plan.note && (
+                <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+                  {plan.note}
+                </p>
+              )}
+              <ul className="mt-4 space-y-2 text-sm text-[var(--foreground)]">
+                {plan.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="rounded-lg border border-[var(--line)] bg-white px-3 py-2"
+                  >
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={withLocale("/contact", locale)}
+                className="mt-5 inline-block rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-strong)]"
+              >
+                {text.customButton}
+              </Link>
+            </article>
+          );
+        })}
       </div>
 
-      {/* Asterisk footnote */}
+      {/* Footnote */}
       <p className="mt-4 text-xs leading-5 text-[var(--muted)]">
         {text.footnote}
       </p>

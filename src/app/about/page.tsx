@@ -62,7 +62,7 @@ export default async function AboutPage({ searchParams }: Props) {
 
       <section className="mt-10 grid gap-5 md:grid-cols-3">
         {[
-          { label: "Full-stack", text: "Frontend, backend, APIs — built in-house, no hand-offs" },
+          { label: "Full-stack", text: "Frontend, backend, APIs: built in-house, no hand-offs" },
           { label: "1-3 weeks", text: "Typical delivery window from brief to live" },
           { label: "Remote-ready", text: "Async-friendly process that works across time zones" },
         ].map((metric) => (
